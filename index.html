@@ -104,8 +104,24 @@
       <button onclick="toggleForm()">➕ Thêm sản phẩm mới</button>
 
       <form id="product-form" class="hidden">
-        <label>🖼️ Chọn hoặc chụp ảnh sản phẩm:</label><br />
-        <input type="file" id="image" accept="image/*" required /><br />
+        <label>🖼️ Ảnh sản phẩm:</label><br />
+
+        <button type="button" id="btnChooseFile">Chọn ảnh từ thư viện</button>
+        <button type="button" id="btnTakePhoto">Chụp ảnh mới</button>
+
+        <input
+          type="file"
+          id="inputFile"
+          accept="image/*"
+          style="display: none"
+        />
+        <input
+          type="file"
+          id="inputCamera"
+          accept="image/*"
+          capture="environment"
+          style="display: none"
+        />
       </form>
     </div>
 
@@ -235,6 +251,30 @@
             });
         });
       }
+
+      document.getElementById("btnChooseFile").addEventListener("click", () => {
+        document.getElementById("inputFile").click();
+      });
+
+      document.getElementById("btnTakePhoto").addEventListener("click", () => {
+        document.getElementById("inputCamera").click();
+      });
+
+      let selectedFile = null;
+
+      document.getElementById("inputFile").addEventListener("change", (e) => {
+        if (e.target.files.length > 0) {
+          selectedFile = e.target.files[0];
+          alert("Bạn đã chọn ảnh từ thư viện: " + selectedFile.name);
+        }
+      });
+
+      document.getElementById("inputCamera").addEventListener("change", (e) => {
+        if (e.target.files.length > 0) {
+          selectedFile = e.target.files[0];
+          alert("Bạn đã chụp ảnh mới: " + selectedFile.name);
+        }
+      });
 
       document
         .getElementById("product-form")
