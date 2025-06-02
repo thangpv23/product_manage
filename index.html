@@ -104,11 +104,9 @@
       <button onclick="toggleForm()">➕ Thêm sản phẩm mới</button>
 
       <form id="product-form" class="hidden">
-        <label>🖼️ Ảnh sản phẩm:</label><br />
-
+        <label>📸 Ảnh sản phẩm:</label><br />
         <button type="button" id="btnChooseFile">Chọn ảnh từ thư viện</button>
         <button type="button" id="btnTakePhoto">Chụp ảnh mới</button>
-
         <input
           type="file"
           id="inputFile"
@@ -122,6 +120,19 @@
           capture="environment"
           style="display: none"
         />
+
+        <label for="name">📝 Tên sản phẩm:</label>
+        <input type="text" id="name" placeholder="Nhập tên sản phẩm" required />
+
+        <label for="desc">📄 Mô tả:</label>
+        <textarea
+          id="desc"
+          rows="3"
+          placeholder="Mô tả ngắn gọn sản phẩm"
+          required
+        ></textarea>
+
+        <button type="submit">📤 Tải lên</button>
       </form>
     </div>
 
