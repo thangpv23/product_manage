@@ -76,7 +76,12 @@
       }
 
       async function signIn() {
-        await supabaseClient.auth.signInWithOAuth({ provider: "google" });
+        await supabaseClient.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: window.location.origin + "/product_manage",
+          },
+        });
       }
 
       async function signOut() {
