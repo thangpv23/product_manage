@@ -224,7 +224,7 @@
         const list = document.getElementById("product-list");
         list.innerHTML = "";
         if (error) {
-          alert("Lỗi khi lấy sản phẩm: " + error.message);
+          // alert("Lỗi khi lấy sản phẩm: " + error.message);
           return;
         }
         if (!products || products.length === 0) {
@@ -268,7 +268,7 @@
                 .single();
 
               if (fetchUrlError) {
-                alert("Lỗi khi lấy ảnh: " + fetchUrlError.message);
+                // alert("Lỗi khi lấy ảnh: " + fetchUrlError.message);
                 return;
               }
 
