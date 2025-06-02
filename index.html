@@ -2,22 +2,84 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quản lý Sản phẩm</title>
     <style>
       body {
         font-family: Arial, sans-serif;
         margin: 20px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0 10px;
+        background-color: #f0f2f5;
       }
+
+      h1,
+      h2 {
+        text-align: center;
+      }
+
       .hidden {
         display: none;
       }
+
       .product {
         border: 1px solid #ccc;
-        padding: 10px;
-        margin: 10px 0;
+        border-radius: 8px;
+        padding: 12px;
+        margin: 12px 0;
+        background-color: #f9f9f9;
       }
+
       .product img {
-        width: 150px;
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        border-radius: 4px;
+        margin-top: 10px;
+      }
+
+      button {
+        margin-top: 8px;
+        padding: 8px 12px;
+        font-size: 1rem;
+        border-radius: 6px;
+        border: none;
+        background-color: #5ea3ec;
+        color: white;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        margin-bottom: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 1rem;
+      }
+
+      textarea {
+        resize: vertical;
+      }
+
+      @media (max-width: 600px) {
+        body {
+          margin: 10px;
+          padding: 0 5px;
+        }
+
+        button {
+          width: 100%;
+        }
       }
     </style>
   </head>
