@@ -143,6 +143,7 @@
             <p>${p.description}</p>
             <small>${new Date(p.created_at).toLocaleString()}</small><br>
             <small>User ID: ${p.user_id}</small><br>
+            <small>User ID: ${p.user_email}</small><br>
             <button id="btn-show-img-${p.id}">Show ảnh</button>
             <div id="img-container-${p.id}" style="margin-top: 10px;"></div>
           `;
@@ -175,7 +176,7 @@
               }
 
               // Hiển thị ảnh
-              imgContainer.innerHTML = `<img src="${data.image_url}" alt="${p.name}" style="max-width: 150px;">`;
+              imgContainer.innerHTML = `<img src="${data.image_url}" alt="${p.name}" style="max-width: 300px;">`;
             });
         });
       }
