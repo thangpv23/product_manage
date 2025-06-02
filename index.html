@@ -103,32 +103,14 @@
       <hr />
       <button onclick="toggleForm()">➕ Thêm sản phẩm mới</button>
 
-      <form id="product-form" class="hidden">
-        <input
-          type="text"
-          id="name"
-          placeholder="Tên sản phẩm"
-          required
-        /><br />
-
-        <textarea id="desc" placeholder="Mô tả"></textarea><br />
-
-        <label>📁 Tải ảnh từ máy:</label><br />
-        <input type="file" id="image-upload" accept="image/*" /><br />
-
-        <label>📷 Hoặc chụp ảnh từ camera:</label><br />
-        <input
-          type="file"
-          id="image-camera"
-          accept="image/*"
-          capture="environment"
-        /><br />
-
-        <small>Chọn một trong hai cách trên để thêm ảnh sản phẩm.</small
-        ><br /><br />
-
-        <button type="submit">📤 Gửi</button>
-      </form>
+      <label>🖼️ Chọn hoặc chụp ảnh sản phẩm:</label><br />
+      <input
+        type="file"
+        id="image"
+        accept="image/*"
+        capture="environment"
+        required
+      /><br />
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
@@ -265,26 +247,17 @@
 
           const name = document.getElementById("name").value;
           const desc = document.getElementById("desc").value;
-
-          const imageUpload = document.getElementById("image-upload").files[0];
-          const imageCamera = document.getElementById("image-camera").files[0];
-
-          const imageFile = imageCamera || imageUpload;
-
-          if (!imageFile) {
-            alert("❌ Vui lòng chọn hoặc chụp một ảnh sản phẩm.");
-            return;
-          }
-
+          const imageFile = document.getElementById("image").files[0];
+          // Tạo một tên file duy nhất, có thể thêm currentUser.id để tránh trùng lặp giữa các user
           const filename = `${currentUser.id}/${Date.now()}_${imageFile.name}`;
 
-          // Bước 1: Upload ảnh
+          // Bước 1: Upload ảnh lên Supabase Storage
           const { data: uploadData, error: uploadError } =
             await supabaseClient.storage
-              .from("product-images")
+              .from("product-images") // Tên bucket của bạn
               .upload(filename, imageFile, {
-                cacheControl: "3600",
-                upsert: false,
+                cacheControl: "3600", // Thời gian cache
+                upsert: false, // Không ghi đè nếu file đã tồn tại
               });
 
           if (uploadError) {
@@ -293,7 +266,7 @@
             return;
           }
 
-          // Bước 2: Lấy public URL
+          // Bước 2: Lấy public URL của ảnh đã upload
           const { data: publicUrlData } = supabaseClient.storage
             .from("product-images")
             .getPublicUrl(filename);
@@ -304,8 +277,9 @@
           }
 
           const imageUrl = publicUrlData.publicUrl;
+          console.log("Ảnh đã upload:", imageUrl);
 
-          // Bước 3: Gửi dữ liệu sản phẩm
+          // Bước 3: Lưu thông tin sản phẩm và Public URL vào database
           const { error: insertError } = await supabaseClient
             .from("products")
             .insert({
@@ -313,7 +287,7 @@
               name,
               email: currentUser.email,
               description: desc,
-              image_url: imageUrl,
+              image_url: imageUrl, // Lưu public URL vào cột image_url
             });
 
           if (insertError) {
