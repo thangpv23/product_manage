@@ -98,6 +98,7 @@
 
       <h2>Danh sách sản phẩm</h2>
       <button onclick="fetchProducts()">🔄 Tải lại</button>
+      <button id="btnAdminDashboard">🔧 Trang quản lý Admin</button>
       <div id="product-list"></div>
 
       <hr />
@@ -276,6 +277,13 @@
             });
         });
       }
+
+      document
+        .getElementById("btnAdminDashboard")
+        .addEventListener("click", () => {
+          // Điều hướng đến trang admin dashboard
+          window.location.href = "admin_dashboard.html";
+        });
 
       document.getElementById("btnChooseFile").addEventListener("click", () => {
         document.getElementById("inputFile").click();

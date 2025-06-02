@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Trang Quản lý Sản phẩm</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f5f6fa;
+      }
+      h1 {
+        text-align: center;
+      }
+      img {
+        max-width: 80px;
+        border-radius: 6px;
+      }
+      table {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📊 Bảng quản lý sản phẩm</h1>
+    <p id="admin-email"></p>
+    <table id="product-table" class="display">
+      <thead>
+        <tr>
+          <th>Tên sản phẩm</th>
+          <th>Mô tả</th>
+          <th>Ảnh</th>
+          <th>Email người tạo</th>
+          <th>Thời gian tạo</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <!-- Supabase + jQuery + DataTables -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <script>
+      const SUPABASE_URL = "https://uyjpywnljchhmqsapfdr.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5anB5d25samNoaG1xc2FwZmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NDQ5NTAsImV4cCI6MjA2NDQyMDk1MH0.fnmLaXvt3vCaMhFlIQSLM2LQq6WRQZ93VvbVqUnCAoU";
+
+      const supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+      let currentUser = null;
+
+      async function checkAuthAndLoad() {
+        const {
+          data: { session },
+        } = await supabaseClient.auth.getSession();
+
+        if (!session) {
+          alert("Vui lòng đăng nhập trước.");
+          window.location.href = "/"; // chuyển về trang chính
+          return;
+        }
+
+        currentUser = session.user;
+
+        // Kiểm tra quyền admin
+        async function checkAdminStatus() {
+          const emailToCheck = currentUser.email.trim().toLowerCase();
+          console.log("Kiểm tra quyền admin với email:", emailToCheck);
+
+          const { data: adminRows, error } = await supabaseClient
+            .from("admins")
+            .select("email")
+            .eq("email", emailToCheck);
+
+          if (error) {
+            console.error("Lỗi khi truy vấn admins:", error);
+          }
+
+          console.log("Kết quả truy vấn admins:", adminRows);
+
+          isAdmin = adminRows && adminRows.length > 0;
+          console.log("isAdmin =", isAdmin);
+        }
+
+        document.getElementById("admin-email").textContent =
+          "🔐 Admin: " + currentUser.email;
+
+        loadTable();
+      }
+
+      async function loadTable() {
+        const { data: products, error } = await supabaseClient
+          .from("products")
+          .select("name, description, image_url, email, created_at")
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          alert("Lỗi khi lấy dữ liệu sản phẩm: " + error.message);
+          return;
+        }
+
+        const tbody = document.querySelector("#product-table tbody");
+        products.forEach((p) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${p.name}</td>
+            <td>${p.description}</td>
+            <td><img src="${p.image_url}" alt="${p.name}"></td>
+            <td>${p.email}</td>
+            <td>${new Date(p.created_at).toLocaleString()}</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // Nếu đã có DataTable thì hủy trước
+        if ($.fn.dataTable.isDataTable("#product-table")) {
+          $("#product-table").DataTable().destroy();
+        }
+
+        $("#product-table").DataTable({
+          pageLength: 10,
+          language: {
+            search: "Tìm kiếm:",
+            lengthMenu: "Hiển thị _MENU_ mục",
+            info: "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
+            paginate: {
+              previous: "Trước",
+              next: "Sau",
+            },
+          },
+        });
+      }
+
+      // Tự động login nếu đã đăng nhập
+      checkAuthAndLoad();
+
+      // Nghe sự kiện đăng nhập từ tab khác
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        if (session) checkAuthAndLoad();
+      });
+    </script>
+  </body>
+</html>
