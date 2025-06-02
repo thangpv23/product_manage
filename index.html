@@ -121,6 +121,11 @@
           style="display: none"
         />
 
+        <p
+          id="file-info"
+          style="margin: 10px 0; font-style: italic; color: #333"
+        ></p>
+
         <label for="name">📝 Tên sản phẩm:</label>
         <input type="text" id="name" placeholder="Nhập tên sản phẩm" required />
 
@@ -276,14 +281,16 @@
       document.getElementById("inputFile").addEventListener("change", (e) => {
         if (e.target.files.length > 0) {
           selectedFile = e.target.files[0];
-          alert("Bạn đã chọn ảnh từ thư viện: " + selectedFile.name);
+          document.getElementById("file-info").textContent =
+            "Đã chọn: " + selectedFile.name;
         }
       });
 
-      document.getElementById("inputCamera").addEventListener("change", (e) => {
+      document.getElementById("inputFile").addEventListener("change", (e) => {
         if (e.target.files.length > 0) {
           selectedFile = e.target.files[0];
-          alert("Bạn đã chụp ảnh mới: " + selectedFile.name);
+          document.getElementById("file-info").textContent =
+            "Đã chọn: " + selectedFile.name;
         }
       });
 
