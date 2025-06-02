@@ -117,7 +117,7 @@
         // Lấy danh sách sản phẩm không lấy trường image_url để tiết kiệm băng thông
         const query = supabaseClient
           .from("products")
-          .select("id, name, description, created_at, user_id") // không lấy image_url
+          .select("id, name, description, created_at, user_id, email") // không lấy image_url
           .order("created_at", { ascending: false });
 
         const { data: products, error } = isAdmin
