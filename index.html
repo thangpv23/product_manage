@@ -125,6 +125,15 @@
           id="file-info"
           style="margin: 10px 0; font-style: italic; color: #333"
         ></p>
+        <img
+          id="preview-img"
+          style="
+            max-width: 200px;
+            margin-top: 10px;
+            display: none;
+            border-radius: 8px;
+          "
+        />
 
         <label for="name">📝 Tên sản phẩm:</label>
         <input type="text" id="name" placeholder="Nhập tên sản phẩm" required />
@@ -280,19 +289,26 @@
 
       document.getElementById("inputFile").addEventListener("change", (e) => {
         if (e.target.files.length > 0) {
-          selectedFile = e.target.files[0];
-          document.getElementById("file-info").textContent =
-            "Đã chọn: " + selectedFile.name;
+          handleFileSelection(e.target.files[0]);
         }
       });
 
-      document.getElementById("inputFile").addEventListener("change", (e) => {
+      document.getElementById("inputCamera").addEventListener("change", (e) => {
         if (e.target.files.length > 0) {
-          selectedFile = e.target.files[0];
-          document.getElementById("file-info").textContent =
-            "Đã chọn: " + selectedFile.name;
+          handleFileSelection(e.target.files[0]);
         }
       });
+      function handleFileSelection(file) {
+        const fileInfo = document.getElementById("file-info");
+        const previewImg = document.getElementById("preview-img");
+
+        if (!file) return;
+
+        selectedFile = file;
+        fileInfo.textContent = "✅ Đã chọn: " + file.name;
+        previewImg.src = URL.createObjectURL(file);
+        previewImg.style.display = "block";
+      }
 
       document
         .getElementById("product-form")
