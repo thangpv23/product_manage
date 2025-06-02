@@ -103,14 +103,16 @@
       <hr />
       <button onclick="toggleForm()">➕ Thêm sản phẩm mới</button>
 
-      <label>🖼️ Chọn hoặc chụp ảnh sản phẩm:</label><br />
-      <input
-        type="file"
-        id="image"
-        accept="image/*"
-        capture="environment"
-        required
-      /><br />
+      <form id="product-form" class="hidden">
+        <label>🖼️ Chọn hoặc chụp ảnh sản phẩm:</label><br />
+        <input
+          type="file"
+          id="image"
+          accept="image/*"
+          capture="environment"
+          required
+        /><br />
+      </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
